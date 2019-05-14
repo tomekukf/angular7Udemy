@@ -5,11 +5,13 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { ChangeColorDirective } from './change-color.directive';
+import { AppUnlessDirective } from './customStructuralDirective/app-unless.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChangeColorDirective
+    ChangeColorDirective,
+    AppUnlessDirective
   ],
   imports: [
     BrowserModule,

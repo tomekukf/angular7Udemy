@@ -25,6 +25,16 @@
             {{oddNumber}}
         </li>
         </div>
+
+        <div *appAppUnless="onlyOdd">
+          <li
+            *ngFor="let oddNumber of oddNUmber"
+            [ngClass]="{odd: oddNumber % 2 !==0}"
+            [ngStyle]="{backgroundColor: oddNumber % 2 !==0 ? 'yellow':'red'}"
+            class="list-group-item">
+            {{oddNumber}}
+          </li>
+        </div>
       </ul>
       <p [appChangeColor]="'red'" [defaultColor]="'green'" >Change color with custom diretive</p>
       <ng-template [ngIf]="onlyOdd">
