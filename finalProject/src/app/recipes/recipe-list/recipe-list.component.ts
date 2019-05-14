@@ -9,9 +9,14 @@ import { Recipe } from '../recipe.model';
 })
 export class RecipeListComponent implements OnInit {
   @Output() recipeWasSelected = new EventEmitter<Recipe>();
-  recipes: Recipe[] = [
-    new Recipe('A Test Recipe', 'This is simply a test', 'https://upload.wikimedia.org/wikipedia/commons/1/15/Recipe_logo.jpeg'),
-    new Recipe('Another Test Recipe', 'This is simply a test', 'https://upload.wikimedia.org/wikipedia/commons/1/15/Recipe_logo.jpeg')
+  recipes : Recipe[] = [
+
+    new  Recipe('banan cake',
+      'delicious',
+      'https://cdn.pixabay.com/photo/2018/11/05/12/42/food-3796017_960_720.jpg'),
+    new Recipe('KFC chicken',
+      'original receipt',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/KFC_Original_Recipe_chicken_in_bucket.jpg/800px-KFC_Original_Recipe_chicken_in_bucket.jpg')
   ];
 
   constructor() { }
