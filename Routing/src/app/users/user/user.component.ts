@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
+import test from '@angular/cli/commands/test';
 
 @Component({
   selector: 'app-user',
@@ -22,6 +23,9 @@ export class UserComponent implements OnInit {
     // If we are 100% that our component wont change we can use snapschot options
     // We are using subscribe when we are not sure if our component wont change during being on this component site
 
+
+
+    // test
 
     this.activeRoute.params.subscribe(
       (params: Params) => {
