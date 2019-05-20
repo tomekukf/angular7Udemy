@@ -22,4 +22,8 @@ export class HomeComponent implements OnInit {
   loadMax() {
 
   }
+
+  loadServer(id: number) {
+    this.router.navigate(['/servers', id , 'edit' ], { queryParams: { alowEdit: 1 }, fragment : 'loading'});
+  }
 }

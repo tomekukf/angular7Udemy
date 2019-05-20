@@ -8,24 +8,26 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./servers.component.css']
 })
 export class ServersComponent implements OnInit {
-  private servers: {id: number, name: string, status: string}[] = [];
+   servers: {id: number, name: string, status: string}[] = [];
 
   constructor(private serversService: ServersService,
 private router: Router,
   private activeRoute: ActivatedRoute) { }
 
   ngOnInit() {
+
     this.servers = this.serversService.getServers();
+    // this.servers = this.activeRoute
   }
 
 
   // relativePath
-  loadUsers() {
-    this.router.navigate(['users'], {relativeTo : this.activeRoute});
-  }
+  // loadUsers() {
+  //   this.router.navigate(['users'], {relativeTo : this.activeRoute});
+  // }
 
   // absolutePath
-  loadUsers1() {
+  loadUsers() {
     this.router.navigate(['/users'], {relativeTo : this.activeRoute});
   }
 
