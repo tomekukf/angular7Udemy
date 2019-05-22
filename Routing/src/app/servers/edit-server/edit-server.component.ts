@@ -12,6 +12,7 @@ export class EditServerComponent implements OnInit {
   server: {id: number, name: string, status: string};
   serverName = '';
   serverStatus = '';
+  allowEdit = false ;
 
 
   // We can fetch query param by using ActivatedRoute
@@ -26,6 +27,11 @@ export class EditServerComponent implements OnInit {
 
     // this.server = this.serversService.getServer( +this.route.snapshot.params['id']);
     // console.log(this.route.snapshot.params['id']);
+    this.route.queryParams.subscribe(
+      (queryParams: Params) => {
+        this.allowEdit = queryParams['allowEdit'] === '1' ? true : false ;
+      }
+    )
     const id = this.route.params['id'];
     console.log(id);
     this.server = this.serversService.getServer(1);
