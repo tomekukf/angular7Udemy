@@ -1,5 +1,6 @@
 # To install rxjs package which let use use old syntax for rxJS
    `npm install --save rxjs-compat`
+   `npm uninstall --save rxjs-compat`
  
 # MyFirstApp
 
