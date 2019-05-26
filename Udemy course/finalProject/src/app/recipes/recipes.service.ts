@@ -45,4 +45,20 @@ export class RecipesService {
   addIngredientToShoppingList(ingredients: Ingredient[]) {
     this.spSercice.addIngredientsToList(ingredients);
   }
+
+  addRecipe(recipe: Recipe){
+    this.recipes.push(recipe)
+    this.recipeSubject.next(this.recipes.slice())
+
+  }
+
+  updateRecipe(index:number, newRecipe: Recipe){
+    this.recipes[index] = newRecipe
+    this.recipeSubject.next(this.recipes.slice())
+  }
+
+  delteRecipe(index: number){
+    this.recipes.splice(index,1);
+    this.recipeSubject.next(this.recipes.slice())
+  }
 }
