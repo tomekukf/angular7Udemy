@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import set = Reflect.set;
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,16 @@ export class AppComponent {
       started: new Date(15, 1, 2017)
     }
   ];
+
+  filterString = '';
+  promiseValue = new Promise(
+    (resolve, reject) => {
+      setTimeout( () => {
+        resolve('stable');
+      } , 2000);
+    }
+  );
+
   getStatusClasses(server: {instanceType: string, name: string, status: string, started: Date}) {
     return {
       'list-group-item-success': server.status === 'stable',
