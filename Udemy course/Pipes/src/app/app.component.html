@@ -8,9 +8,9 @@
           [ngClass]="getStatusClasses(server)">
           <span
             class="badge">
-            {{ server.status }}
+            {{ server.status | uppercase | json }}
           </span>
-          <strong>{{ server.name }}</strong> | {{ server.instanceType }} | {{ server.started }}
+          <strong>{{ server.name | shorten:5 }}</strong> | {{ server.instanceType| uppercase }} | {{ server.started | date: getFormat()}}
         </li>
       </ul>
     </div>
