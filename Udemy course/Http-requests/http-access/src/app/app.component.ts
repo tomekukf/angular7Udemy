@@ -11,6 +11,11 @@ import {Response} from '@angular/http';
 export class AppComponent {
 
   constructor(private serverService: ServerService) {}
+// We are receiving observable compoent from service but we are not subcribing to it to detch a data
+//   we are usuing asyns pipe it html side and this pipe is susbrining to it and resoliving promise
+  asyncData = this.serverService.getDataFromServer();
+
+
   servers = [
     {
       name: 'Testserver',
@@ -48,16 +53,15 @@ export class AppComponent {
 
   }
 
-  sresponse: any;
 
   onGet() {
     // noinspection JSDeprecatedSymbols
     this.serverService.getServers().subscribe(
-      (response: Response) => {
-        this.sresponse=response.json();
-        console.log(this.sresponse);
+      (data: any[]) => {
+        this.servers = data;
+        console.log(data);
       },
       (errors) => console.log(errors)
-    )
+    );
   }
 }
