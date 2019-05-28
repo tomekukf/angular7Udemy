@@ -17,10 +17,10 @@ import {AppRoutingModule} from './app-routing.module';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import {RecipesService} from './recipes/recipes.service';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
-
     AppComponent,
     DropdownDirective,
     HeaderComponent,
@@ -37,7 +37,7 @@ import {RecipesService} from './recipes/recipes.service';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
+    HttpClientModule,
     AppRoutingModule
   ],
   providers: [ShoppingService,RecipesService],
