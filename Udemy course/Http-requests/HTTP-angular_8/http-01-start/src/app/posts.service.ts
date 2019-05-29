@@ -10,7 +10,8 @@ import {Observable, Subject} from 'rxjs';
 export class PostsService {
 
   constructor(private http: HttpClient) { }
-  private subject = new Subject<any>();
+   subject = new Subject<any>();
+   errorSub = new Subject<any>();
 
   createAndStrorePost(title: string, content: string) {
     const newPost: Post = {  title, content };
@@ -19,9 +20,13 @@ export class PostsService {
         'https://angualr-http-test.firebaseio.com/post/post.json',
         newPost
       )
-      .subscribe(responseData => {
+      .subscribe((responseData) => {
+
         console.log(responseData);
-      });
+      },
+        error => {
+        this.errorSub.next(error);
+        });
   }
 
 
@@ -70,5 +75,9 @@ export class PostsService {
 
   getMessage(): Observable<any> {
     return this.subject.asObservable();
+  }
+
+  deletePost(){
+    return this.http.delete('https://angualr-http-test.firebaseio.com/post/post.json');
   }
 }

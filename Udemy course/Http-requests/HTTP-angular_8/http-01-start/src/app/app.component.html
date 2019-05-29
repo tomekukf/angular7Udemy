@@ -36,7 +36,7 @@
   <hr />
   <div class="row">
     <div class="col-xs-12 col-md-6 col-md-offset-3">
-      <button class="btn btn-primary" (click)="onFetchPosts2()">
+      <button class="btn btn-primary" (click)="onFetchPosts1()">
         Fetch Posts
       </button>
             <button
@@ -51,7 +51,7 @@
   <div class="spinner-border" role="isF">
   <div class="row">
     <div class="col-xs-12 col-md-6 col-md-offset-3 ">
-      <p *ngIf="loadedPosts.length < 1 && !isFethcing ">No posts available!</p>
+      <p *ngIf="loadedPosts.length < 1 && !isFethcing && error ">No posts available!</p>
       <ul class="list-group" *ngIf="loadedPosts.length > 1">
         <li class="list-group-item" *ngFor="let post of loadedPosts">
           <h3>{{post.title}}</h3>
@@ -63,6 +63,10 @@
   </div>
 
 
+  </div>
+  <div *ngIf="error">
+    <p> Error occured</p>
+    <h1>{{error}}</h1>
   </div>
   <div class="spinner-border" role="status">
     <span class="sr-only">Loading...</span>
