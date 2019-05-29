@@ -1,62 +1,67 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {map} from 'rxjs/operators';
+import {Post} from './post.model';
+import {PostsService} from './posts.service';
+import {post} from 'selenium-webdriver/http';
+import {Subscription} from 'rxjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  loadedPosts = [];
+export class  AppComponent implements OnInit, OnDestroy {
+  loadedPosts: Post[] = [];
+  isFethcing = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private postService: PostsService) {}
+subsc: Subscription;
 
   ngOnInit() {
     this.fetchPost();
+    // this.postService.fetchPost();
+    // this.subsc =  this.postService.getMessage().subscribe(
+    //   (data: Post[]) => {
+    //     console.log(data);
+    //     this.loadedPosts = data;
+    //   }
+    // );
   }
 
-  onCreatePost(postData: { title: string; content: string }) {
+  onCreatePost(postData: Post) {
     // Send Http request
-    this.http
-      .post(
-        'https://angualr-http-test.firebaseio.com/post/post.json',
-        postData
-      )
-      .subscribe(responseData => {
-        console.log(responseData);
-      });
+ this.postService.createAndStrorePost(postData.title, postData.content);
   }
 
 
-  onFetchPosts() {
-    this.fetchPost();
+  onFetchPosts2() {
+    console.log('onfetch2')
+    this.postService.getMessage().subscribe(
+      (data: Post[]) => {
+        console.log(data);
+        this.loadedPosts = data;
+      }
+    );
+  }
+
+  onFetchPosts1() {
+  this.postService.fetchPostReturnObservable().subscribe(
+      (data) => {
+        this.loadedPosts = data;
+      }
+    );
   }
 
 
   fetchPost() {
-    this.http.get('https://angualr-http-test.firebaseio.com/post/post.json')
-      .pipe(map(
-        (reponseData) => {
-          const arrayOfPost = [];
-          for ( const key in reponseData) {
-            if (reponseData.hasOwnProperty(key)) {
-              // arrayOfPost.push({...reponseData[key], id : key });
-              arrayOfPost.push({...reponseData[key], id: key });
-            }
-          }
-          return arrayOfPost;
-        }
-      )).
-
-    subscribe(
-      (response) => {
-        console.log(response);
-      }
-    );
-    // Send Http request
+    this.postService.fetchPost();
   }
 
   onClearPosts() {
     // Send Http request
+  }
+
+  ngOnDestroy() {
+    this.subsc.unsubscribe();
   }
 }
