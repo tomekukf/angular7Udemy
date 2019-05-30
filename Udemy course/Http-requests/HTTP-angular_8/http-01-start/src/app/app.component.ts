@@ -21,6 +21,12 @@ export class  AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.postService.errorSub.subscribe(
+      (data) => {
+        this.loadedPosts = data;
+        console.log('1' + this.loadedPosts);
+        Object.assign(this.loadedPosts, data);
+        console.log(this.loadedPosts);
+      },
       (error) => {
         this.error = error.message;
     });

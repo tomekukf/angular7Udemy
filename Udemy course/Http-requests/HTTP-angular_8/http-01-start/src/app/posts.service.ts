@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Post} from './post.model';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
 
 @Injectable({
@@ -18,7 +18,9 @@ export class PostsService {
 
     this.http.post(
         'https://angualr-http-test.firebaseio.com/post/post.json',
-        newPost
+        newPost,
+      // { observe: 'response'}
+      { observe: 'body'}
       )
       .subscribe((responseData) => {
 
@@ -32,7 +34,10 @@ export class PostsService {
 
 
   fetchPost() {
-    this.http.get<{[key: string]: Post}>('https://angualr-http-test.firebaseio.com/post/post.json')
+    this.http.get<{[key: string]: Post}>('https://angualr-http-test.firebaseio.com/post/post.json',
+      { headers: new HttpHeaders({'custoom-header': 'Hello Tomek'}),
+      params: new HttpParams().set('print', 'pretty')
+      })
       .pipe(map(
         (responseData) => {
           const arrayOfPost: Post[] = [];
@@ -78,6 +83,12 @@ export class PostsService {
   }
 
   deletePost(){
-    return this.http.delete('https://angualr-http-test.firebaseio.com/post/post.json');
+    return this.http.delete('https://angualr-http-test.firebaseio.com/post/post.json'
+      , { observe : 'events', responseType: 'json'},
+      ).pipe(tap(
+      (events ) => {
+        console.log(events);
+      }
+    ));
   }
 }
