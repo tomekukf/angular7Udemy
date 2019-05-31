@@ -25,14 +25,7 @@ export class AuthInterceptorsComponent implements OnInit, HttpInterceptor {
 
     // we need to return request via next method to let him continue its journey to real desitination.
     // return next.handle(req);
-    return next.handle(modifiedRequest).pipe(tap(
-      event => {
-        if (event.type === HttpEventType.Response){
-          console.log('response arrived');
-          console.log(event.body);
-        }
-      }
-    ));
+    return next.handle(modifiedRequest) ;
   }
 
 }

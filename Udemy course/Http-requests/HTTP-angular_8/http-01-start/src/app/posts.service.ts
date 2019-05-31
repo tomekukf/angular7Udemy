@@ -9,9 +9,14 @@ import {Observable, Subject} from 'rxjs';
 })
 export class PostsService {
 
+  // methods like post get update delete giving us back observables so we can make operations on this data
+  // trasnsorm it or tap can print
+  // https://angular.io/guide/http
+
   constructor(private http: HttpClient) { }
    subject = new Subject<any>();
    errorSub = new Subject<any>();
+
 
   createAndStrorePost(title: string, content: string) {
     const newPost: Post = {  title, content };
