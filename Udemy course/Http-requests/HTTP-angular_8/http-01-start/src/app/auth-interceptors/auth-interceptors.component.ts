@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Component, OnInit} from '@angular/core';
+import {HttpEventType, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
+import {tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-auth-interceptors',
@@ -20,12 +20,19 @@ export class AuthInterceptorsComponent implements OnInit, HttpInterceptor {
     if(req.url === 'https://angualr-http-test.firebaseio.com/post/post.json') {
       console.log('intercepted method with https://angualr-http-test.firebaseio.com/post/post.json url');
     }
-    const modifiedRequest = req.clone({headers: req.headers.append('Auth-token', 'tomek-token')})
+    const modifiedRequest = req.clone({headers: req.headers.append('Auth-token', 'tomek-token')});
 
 
     // we need to return request via next method to let him continue its journey to real desitination.
     // return next.handle(req);
-    return next.handle(modifiedRequest);
+    return next.handle(modifiedRequest).pipe(tap(
+      event => {
+        if (event.type === HttpEventType.Response){
+          console.log('response arrived');
+          console.log(event.body);
+        }
+      }
+    ));
   }
 
 }
