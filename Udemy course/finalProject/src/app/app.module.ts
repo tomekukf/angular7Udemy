@@ -18,6 +18,7 @@ import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.compon
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import {RecipesService} from './recipes/recipes.service';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {SrverService} from './shared/srver.service';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
     HttpClientModule,
     AppRoutingModule
   ],
+  // or add in service annotation provide in root
   providers: [ShoppingService,RecipesService],
   bootstrap: [AppComponent]
 })

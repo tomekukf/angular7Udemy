@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {Ingredient} from '../shared/ingredient.model';
 import {ShoppingService} from '../shopping-list/shopping-list.service';
 import {Subject} from 'rxjs';
+import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 @Injectable()
 export class RecipesService {
@@ -51,6 +52,34 @@ export class RecipesService {
     this.recipeSubject.next(this.recipes.slice())
 
   }
+  recipesArray: Recipe[] = [] ;
+
+
+
+  addRecipes(recipe: Recipe[]){
+    console.log('adding recipes'
+    )
+    // console.log(this.recipes);
+    // console.log(recipe);
+    console.log(recipe.length)
+
+  recipe.map(
+  (elem) =>{
+    console.log(elem[0])
+    console.log(elem[1])
+
+    this.addRecipe(elem[0]);
+    this.addRecipe(elem[1]);
+  })
+    console.log(this.recipesArray)
+
+
+
+
+  }
+
+
+
 
   updateRecipe(index:number, newRecipe: Recipe){
     this.recipes[index] = newRecipe
@@ -59,6 +88,12 @@ export class RecipesService {
 
   delteRecipe(index: number){
     this.recipes.splice(index,1);
+    this.recipeSubject.next(this.recipes.slice())
+  }
+
+
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
     this.recipeSubject.next(this.recipes.slice())
   }
 }
