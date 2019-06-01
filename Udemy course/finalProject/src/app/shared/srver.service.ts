@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {Recipe} from '../recipes/recipe.model';
 import {map, tap} from 'rxjs/operators';
 import {RecipesService} from '../recipes/recipes.service';
-import {forEach} from '@angular/router/src/utils/collection';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +33,7 @@ export class SrverService {
   }
 
 
-   // if properties of objext are nested in JSOB object we need to user for ...in loop
+   // if properties of object are nested in JSON object we need to user for ...in loop
   getData1(){
     // return this.http.get<{[key: string]: Recipe}>('https://angular-recipe-book-udemy.firebaseio.com/recipes.json')
     return this.http.get('https://angular-recipe-book-udemy.firebaseio.com/recipes.json').pipe(map(
@@ -64,23 +63,20 @@ export class SrverService {
 
 
 
-  getData3(){
-   return this.http.get<Recipe[]>('https://angular-recipe-book-udemy.firebaseio.com/recipes.json').pipe(map(
-     recipes => {
-       console.log(recipes)
-       return recipes.map(recipe => {
-         // return{...recipe, ingredients : [{'amount' : 1,'name' : 'tomek'},{'amount' : 1 ,'name' : 'tomek'}] };
-         return{...recipe, ingredients : recipe.ingredients ? recipe.ingredients : [] };
-       })
-     }
-   )).
-
-   subscribe(
-      (recipes)=>{
-        this.recipeService.setRecipes(recipes);
+  getData3() {
+    return this.http.get<Recipe[]>('https://angular-recipe-book-udemy.firebaseio.com/recipes.json').pipe(map(
+      recipes => {
+        console.log(recipes)
+        return recipes.map(recipe => {
+          // return{...recipe, ingredients : [{'amount' : 1,'name' : 'tomek'},{'amount' : 1 ,'name' : 'tomek'}] };
+          return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
+        })
       }
-    )
-  }
+    ),tap(
+      recipes=>{
+        this.recipeService.setRecipes(recipes);
+      }))};
+
 
   saveDataNotWorkingPerfectly(){
     return this.http.post('https://angular-recipe-book-udemy.firebaseio.com/recipes.json',this.recipeService.getAllRecipes()).pipe(map(

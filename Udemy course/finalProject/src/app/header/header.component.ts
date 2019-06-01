@@ -26,7 +26,7 @@ export class HeaderComponent implements OnDestroy{
   }
 
   onFetch() {
-    this.serverService.getData3()
+    this.serverService.getData3().subscribe()
   }
 
   // onFetch1() {
