@@ -57,27 +57,6 @@ export class RecipesService {
 
 
 
-  addRecipes(recipe: Recipe[]){
-    console.log('adding recipes'
-    )
-    // console.log(this.recipes);
-    // console.log(recipe);
-    console.log(recipe.length)
-
-  recipe.map(
-  (elem) =>{
-    console.log(elem[0])
-    console.log(elem[1])
-
-    this.addRecipe(elem[0]);
-    this.addRecipe(elem[1]);
-  })
-    console.log(this.recipesArray)
-
-
-
-
-  }
 
 
 

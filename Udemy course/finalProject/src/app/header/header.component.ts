@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
   }
 
   onFetch() {
-    this.serverService.getData3().subscribe()
+    this.serverService.getData4().subscribe()
   }
 
   // onFetch1() {

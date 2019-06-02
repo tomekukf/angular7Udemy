@@ -17,7 +17,7 @@ export class RecipesResolverService implements  Resolve<Recipe[]>{
     let allRecipes = this.recipeService.getAllRecipes();
 
     if (allRecipes.length===0){
-      return this.recipeServe.getData3();
+      return this.recipeServe.getData4();
     } else {
     return allRecipes
     }

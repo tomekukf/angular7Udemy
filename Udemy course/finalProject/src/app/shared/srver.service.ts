@@ -66,28 +66,46 @@ export class SrverService {
 
 
 
-  getData3() {
-    return this.authService.userSubject.pipe(
-      //we can take vaaues from last object in chain with this beahvoiurSubject
-      take(1),
-      //we need to return our observable(subject) to be able to subscribe it later
-      exhaustMap(user => {
-        return this.http.get<Recipe[]>('https://angular-recipe-book-udemy.firebaseio.com/recipes.json',{params: new HttpParams().set('auth',user.token))}
+  // getData3() {
+  //   return this.authService.userSubject.pipe(
+  //     //we can take vaaues from last object in chain with this beahvoiurSubject
+  //     take(1),
+  //     //we need to return our observable(subject) to be able to subscribe it later
+  //     exhaustMap(user => {
+  //       return this.http.get<Recipe[]>('https://angular-recipe-book-udemy.firebaseio.com/recipes.json',{params: new HttpParams().set('auth',user.token))}
+  //
+  //     ) ,
+  //     //simply adding next chain operator on data via comma
+  //     map(
+  //       recipes => {
+  //         console.log(recipes)
+  //         return recipes.map(recipe => {
+  //           // return{...recipe, ingredients : [{'amount' : 1,'name' : 'tomek'},{'amount' : 1 ,'name' : 'tomek'}] };
+  //           return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
+  //         })
+  //       }
+  //     ),tap(
+  //       recipes=>{
+  //         this.recipeService.setRecipes(recipes);
+  //       }))};
 
-      ) ,
-      //simply adding next chain operator on data via comma
-      map(
-        recipes => {
-          console.log(recipes)
-          return recipes.map(recipe => {
-            // return{...recipe, ingredients : [{'amount' : 1,'name' : 'tomek'},{'amount' : 1 ,'name' : 'tomek'}] };
-            return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
-          })
-        }
-      ),tap(
-        recipes=>{
-          this.recipeService.setRecipes(recipes);
-        }))};
+
+  getData4() {
+
+        return this.http.get<Recipe[]>('https://angular-recipe-book-udemy.firebaseio.com/recipes.json').pipe(map(
+          recipes => {
+            console.log(recipes)
+            return recipes.map(recipe => {
+              // return{...recipe, ingredients : [{'amount' : 1,'name' : 'tomek'},{'amount' : 1 ,'name' : 'tomek'}] };
+              return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
+            })
+          }
+        ),tap(
+          recipes=>{
+            this.recipeService.setRecipes(recipes);
+          }))};
+
+
 
 
 
