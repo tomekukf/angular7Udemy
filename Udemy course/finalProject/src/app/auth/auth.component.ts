@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from './auth.service';
+import {AuthService, IAuthResponse} from './auth.service';
+import {Observable} from 'rxjs';
 
 interface ILogin {
   email: string,
@@ -13,15 +14,19 @@ interface ILogin {
   templateUrl: './auth.component.html'
 })
 export class AuthComponent implements OnInit {
-  isLogged=true;
+  isAuthenticated=true;
   authForm: FormGroup;
    message: string;
   isloading = false;
+
+  authObservable : Observable<IAuthResponse>;
+
 
   private returnUrl: '../';
 
   model: ILogin = { email: "admin", password: "admin123" };
   error = null;
+
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
@@ -36,23 +41,31 @@ export class AuthComponent implements OnInit {
   }
 
   swtichMOde() {
-    this.isLogged= !this.isLogged;
+    this.isAuthenticated= !this.isAuthenticated;
   }
   get f() { return this.authForm.controls; }
 
 
   onSubmit() {
-    // this.authForm.reset()
+
+    this.isloading=true;
+    let email = this.f.email.value;
+    let password = this.f.password.value;
+
 
     if (this.authForm.invalid) {
       return;
-    }
-    else {
-      this.isloading=true;
-      let email = this.f.email.value;
-      let password = this.f.password.value;
+    }else {
 
-      this.authService.signUp(email,password).subscribe(
+      if (this.isAuthenticated) {
+        console.log('logging ...')
+        this.authObservable = this.authService.login(email, password)
+      } else {
+        console.log('signing up ...')
+        this.authObservable = this.authService.signUp(email, password)
+      }
+    }
+      this.authObservable.subscribe(
         (res) =>{
           console.log(res)
           this.isloading=false;
@@ -60,14 +73,13 @@ export class AuthComponent implements OnInit {
         },
         error1 => {
           console.log(error1)
-          console.log(error1.error.error.message)
 
           this.error = error1.error.error.message
           this.isloading=false;
 
         }
       );
-
+      this.authForm.reset()
 
     }
 
@@ -86,7 +98,7 @@ export class AuthComponent implements OnInit {
       // }}
       //
     
-  }
+
 
 
   private initForm() {

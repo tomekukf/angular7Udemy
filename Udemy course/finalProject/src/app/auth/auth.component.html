@@ -25,8 +25,8 @@
         <p>{{message}}</p>
       </div>
       <div>
-        <button class="btn btn-primary" [disabled]="!authForm.valid" type="submit">{{isLogged ? 'Login' : 'Sign up'}}</button>
-        <button class="btn btn-primary" type="button" (click)="swtichMOde()">Switch to {{isLogged? 'sign up mode' : 'login mode'}}</button>
+        <button class="btn btn-primary" [disabled]="!authForm.valid" type="submit">{{isAuthenticated ? 'Login' : 'Sign up'}}</button>
+        <button class="btn btn-primary" type="button" (click)="swtichMOde()">Switch to {{isAuthenticated? 'sign up mode' : 'login mode'}}</button>
       </div>
     </form>
   </div>
