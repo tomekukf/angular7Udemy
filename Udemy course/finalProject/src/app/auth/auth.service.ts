@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {catchError} from 'rxjs/operators';
-import {throwError} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {Subject, throwError} from 'rxjs';
+import {User} from './user.model';
 
 
 export interface IAuthResponse {
@@ -19,12 +20,24 @@ export interface IAuthResponse {
 })
 export class AuthService {
 
+  userSubject = new Subject<User>();
+
   constructor(private http: HttpClient) { }
 
   signUp(email: string, password: string){
    return  this.http.post<IAuthResponse>('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyBihmggsyQfDeCHbGv-ZrzeldQm_mSzh6k',
      {email: email, password: password, returnSecureToken: true})
-     .pipe(catchError(this.handleError))
+     .pipe(catchError(this.handleError),
+       tap(
+         (respData) => {
+           this.handleAuth(
+             respData.email,
+             respData.localId,
+             respData.idToken,
+             +respData.expiresIn);
+         }
+
+       ))
   }
 
 
@@ -32,7 +45,17 @@ export class AuthService {
   login(email: string, password: string){
     return  this.http.post<IAuthResponse>('https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyBihmggsyQfDeCHbGv-ZrzeldQm_mSzh6k',
       {email: email, password: password, returnSecureToken: true})
-      .pipe(catchError(this.handleError))
+      .pipe(catchError(this.handleError),
+        tap(
+          (respData) => {
+            this.handleAuth(
+              respData.email,
+              respData.localId,
+              respData.idToken,
+              +respData.expiresIn);
+          }
+        )
+      )
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -52,4 +75,17 @@ export class AuthService {
     }
     return throwError(errorMessage);
   }
+
+  private handleAuth(email: string, localId: string, idToken: string, expiresIn: number) {
+    const expDate = new Date(new Date().getTime() + expiresIn*1000);
+    const user = new User(
+      email,
+      localId,
+      idToken,
+      expDate);
+    this.userSubject.next(user);
+
+  }
+
+
 }
