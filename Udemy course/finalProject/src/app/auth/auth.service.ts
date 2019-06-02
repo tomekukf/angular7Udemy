@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators';
-import {Subject, throwError} from 'rxjs';
+import {BehaviorSubject, Subject, throwError} from 'rxjs';
 import {User} from './user.model';
 
 
@@ -20,24 +20,23 @@ export interface IAuthResponse {
 })
 export class AuthService {
 
-  userSubject = new Subject<User>();
+  userSubject = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient) { }
 
   signUp(email: string, password: string){
    return  this.http.post<IAuthResponse>('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyBihmggsyQfDeCHbGv-ZrzeldQm_mSzh6k',
      {email: email, password: password, returnSecureToken: true})
-     .pipe(catchError(this.handleError),
-       tap(
-         (respData) => {
-           this.handleAuth(
-             respData.email,
-             respData.localId,
-             respData.idToken,
-             +respData.expiresIn);
-         }
-
-       ))
+     .pipe(catchError(this.handleError)
+       // , tap(
+       //   (respData) => {
+       //     this.handleAuth(
+       //       respData.email,
+       //       respData.localId,
+       //       respData.idToken,
+       //       +respData.expiresIn);
+       //   })
+     )
   }
 
 
@@ -53,9 +52,7 @@ export class AuthService {
               respData.localId,
               respData.idToken,
               +respData.expiresIn);
-          }
-        )
-      )
+          }))
   }
 
   private handleError(errorRes: HttpErrorResponse) {

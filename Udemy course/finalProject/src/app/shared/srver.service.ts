@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Recipe} from '../recipes/recipe.model';
-import {map, tap} from 'rxjs/operators';
+import {exhaustMap, map, take, tap} from 'rxjs/operators';
 import {RecipesService} from '../recipes/recipes.service';
+import {AuthService} from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SrverService {
 
-  constructor(private http: HttpClient,private recipeService: RecipesService) {
+  constructor(private http: HttpClient,
+              private recipeService: RecipesService,
+              private authService: AuthService) {
 
   }
 
@@ -64,18 +67,28 @@ export class SrverService {
 
 
   getData3() {
-    return this.http.get<Recipe[]>('https://angular-recipe-book-udemy.firebaseio.com/recipes.json').pipe(map(
-      recipes => {
-        console.log(recipes)
-        return recipes.map(recipe => {
-          // return{...recipe, ingredients : [{'amount' : 1,'name' : 'tomek'},{'amount' : 1 ,'name' : 'tomek'}] };
-          return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
-        })
-      }
-    ),tap(
-      recipes=>{
-        this.recipeService.setRecipes(recipes);
-      }))};
+    return this.authService.userSubject.pipe(
+      //we can take vaaues from last object in chain with this beahvoiurSubject
+      take(1),
+      //we need to return our observable(subject) to be able to subscribe it later
+      exhaustMap(user => {
+        return this.http.get<Recipe[]>('https://angular-recipe-book-udemy.firebaseio.com/recipes.json',{params: new HttpParams().set('auth',user.token))}
+
+      ) ,
+      //simply adding next chain operator on data via comma
+      map(
+        recipes => {
+          console.log(recipes)
+          return recipes.map(recipe => {
+            // return{...recipe, ingredients : [{'amount' : 1,'name' : 'tomek'},{'amount' : 1 ,'name' : 'tomek'}] };
+            return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
+          })
+        }
+      ),tap(
+        recipes=>{
+          this.recipeService.setRecipes(recipes);
+        }))};
+
 
 
   saveDataNotWorkingPerfectly(){
