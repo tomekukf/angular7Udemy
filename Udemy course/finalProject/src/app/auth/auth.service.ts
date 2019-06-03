@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators';
 import {BehaviorSubject, Subject, throwError} from 'rxjs';
 import {User} from './user.model';
+import {Router} from '@angular/router';
 
 
 export interface IAuthResponse {
@@ -21,8 +22,10 @@ export interface IAuthResponse {
 export class AuthService {
 
   userSubject = new BehaviorSubject<User>(null);
+  private tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private router: Router) { }
 
   signUp(email: string, password: string){
    return  this.http.post<IAuthResponse>('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyBihmggsyQfDeCHbGv-ZrzeldQm_mSzh6k',
@@ -80,9 +83,49 @@ export class AuthService {
       localId,
       idToken,
       expDate);
+    console.log('================')
+    console.log(user);
     this.userSubject.next(user);
+    this.autoLogout(expiresIn*1000)
+    localStorage.setItem('userData',JSON.stringify(user))
+    // sessionStorage.
+  }
 
+  autologin(){
+    const userData: {
+      email: string,
+      id: string,
+      _token: string,
+      _tokenExpDate: string
+    } = JSON.parse(localStorage.getItem('userData'));
+
+    if(!userData){
+      return ;
+    }
+    const user = new User(userData.email,userData.id,userData._token,new Date(userData._tokenExpDate))
+    if (user.token) {
+      const expirationDuration =
+        new Date(userData._tokenExpDate).getTime() -
+      new Date().getTime();
+      this.autoLogout(expirationDuration);
+      this.userSubject.next(user)
+    }
+
+  }
+  autoLogout(expirationDuration: number){
+    this.tokenExpirationTimer = setTimeout(()=>{
+  this.logout()
+    },3000)
   }
 
 
+  logout() {
+    this.userSubject.next(null);
+    this.router.navigate(['/auth']);
+    localStorage.removeItem('userData');
+    if (this.tokenExpirationTimer){
+      clearTimeout(this.tokenExpirationTimer)
+    }
+    this.tokenExpirationTimer = null;
+  }
 }

@@ -17,8 +17,11 @@ export class AuthInterceptorsService implements HttpInterceptor{
     return this.authService.userSubject.pipe(take(1),
       exhaustMap(user => {
         if (!user){
+          console.log( 'user should be null' + user)
           return next.handle(req);
         }
+        console.log( 'user should not  be null' + user)
+
         const modReq = req.clone({
           params: new HttpParams().set('auth',user.token)
         })

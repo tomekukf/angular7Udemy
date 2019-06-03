@@ -6,6 +6,9 @@ export class User {
               private _tokenExpDate : Date) {
 
   }
+
+  
+
   get token (){
 
     if (!this._tokenExpDate || this._tokenExpDate < new Date()){
