@@ -3,7 +3,6 @@ import {Injectable} from '@angular/core';
 import {Ingredient} from '../shared/ingredient.model';
 import {ShoppingService} from '../shopping-list/shopping-list.service';
 import {Subject} from 'rxjs';
-import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 @Injectable()
 export class RecipesService {

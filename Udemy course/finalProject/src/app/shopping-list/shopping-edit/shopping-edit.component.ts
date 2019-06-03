@@ -9,7 +9,6 @@ import { Ingredient } from '../../shared/ingredient.model';
 import {ShoppingService} from '../shopping-list.service';
 import {NgForm} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -18,7 +17,7 @@ import {el} from '@angular/platform-browser/testing/src/browser_util';
 })
 export class ShoppingEditComponent implements OnInit, OnDestroy{
 
-  @ViewChild('form')formRef: NgForm;
+  @ViewChild('form', { static: true })formRef: NgForm;
 
   subscription: Subscription ;
   edditingMode = false;
