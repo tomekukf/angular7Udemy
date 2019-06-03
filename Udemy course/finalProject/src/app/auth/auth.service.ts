@@ -107,6 +107,7 @@ export class AuthService {
       const expirationDuration =
         new Date(userData._tokenExpDate).getTime() -
       new Date().getTime();
+      console.log(expirationDuration)
       this.autoLogout(expirationDuration);
       this.userSubject.next(user)
     }
@@ -115,7 +116,7 @@ export class AuthService {
   autoLogout(expirationDuration: number){
     this.tokenExpirationTimer = setTimeout(()=>{
   this.logout()
-    },3000)
+    },expirationDuration)
   }
 
 
